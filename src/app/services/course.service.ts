@@ -7,7 +7,46 @@ import { Subcourse } from '../models/subcourse';
   providedIn: 'root'
 })
 export class CourseService {
-  private courses: Course[] = [];
+  private courses: Course[] = [
+    // {
+    //   id: 1,
+    //   name: "Course 1",
+    //   startDate: new Date('2025-01-01'),
+    //   endDate: new Date('2025-12-31'),
+    //   subcourses: [{
+    //     id: 1,
+    //     name: "Subcourse 1",
+    //     startDate: new Date('2025-05-01'), 
+    //     endDate: new Date('2025-06-01'),
+    //     courseId: 1
+    //   }, {
+    //     id: 2,
+    //     name: "Subcourse 2",
+    //     startDate: new Date('2025-07-01'),
+    //     endDate: new Date('2025-08-01'),
+    //     courseId: 1
+    //   }]
+    // } ,
+    // {
+    //   id: 1,
+    //   name: "Course 2",
+    //   startDate: new Date('2025-01-01'),
+    //   endDate: new Date('2025-12-31'),
+    //   subcourses: [{
+    //     id: 1,
+    //     name: "Subcourse 1",
+    //     startDate: new Date('2025-05-05'), 
+    //     endDate: new Date('2025-06-01'),
+    //     courseId: 1
+    //   }, {
+    //     id: 2,
+    //     name: "Subcourse 2",
+    //     startDate: new Date('2025-07-01'),
+    //     endDate: new Date('2025-08-01'),
+    //     courseId: 1
+    //   }]
+    // }
+  ];
   private coursesSubject = new BehaviorSubject<Course[]>(this.courses);
 
   constructor() {}

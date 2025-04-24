@@ -21,8 +21,8 @@
       </td>
       <td>{{ course.id }}</td>
       <td>{{ course.name }}</td>
-      <td>{{ course.startDate }}</td>
-      <td>{{ course.endDate }}</td>
+      <td>{{ course.startDate| date: 'dd/MM/yyyy' }}</td>
+      <td>{{ course.endDate  | date: 'dd/MM/yyyy'}}</td>
       <td>
         <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditCourseDialog(course)"></button>
         <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="openAddSubcourseDialog(course)"></button>
@@ -38,8 +38,8 @@
             <tr>
               <td style="font-weight: bold;">Sub-Course info :</td>
               <td>{{ subcourse.name }}</td>
-              <td>{{ subcourse.startDate }}</td>
-              <td>{{ subcourse.endDate }}</td>
+              <td>{{ subcourse.startDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ subcourse.endDate | date: 'dd/MM/yyyy'}}</td>
               <td>
                 <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditSubcourseDialog(course, subcourse)"></button>
                 <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteSubcourse(course.id, subcourse.id)"></button>
@@ -68,8 +68,11 @@
 <app-subcourse-dialog
   #subcourseDialog
   [visible]="displaySubcourseDialog"
+  [subcourseErrorMessage]="subcourseErrorMessage"
   [subcourse]="selectedSubcourse"
   [isEdit]="isEditSub"
   (visibleChange)="displaySubcourseDialog = $event"
   (onSave)="handleSaveSubcourse($event)">
 </app-subcourse-dialog>
+
+

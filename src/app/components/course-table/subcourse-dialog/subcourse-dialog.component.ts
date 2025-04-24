@@ -25,11 +25,17 @@ export class SubcourseDialogComponent implements OnInit , OnChanges{
   subcourseForm!: FormGroup;
 @Input() course!: Course;
 @Input() otherSubcourses: Subcourse[] = [];
+@Input() subcourseErrorMessage: string = '';
+
 
 constructor(private fb: FormBuilder) {}
 
 ngOnInit() {
   this.initForm();
+  this.subcourseForm.valueChanges.subscribe(() => {
+    this.subcourseErrorMessage = '';
+  });
+  
 }
 private startBeforeEndValidator(control: AbstractControl): ValidationErrors | null {
   const start = new Date(control.get('startDate')?.value);
@@ -114,6 +120,11 @@ save() {
   console.log("Subcourse ", subcourse);
 
   this.onSave.emit(subcourse); 
+
+  if (!subcourse.id) {
+    subcourse.id = Date.now(); 
+  }
+  this.onSave.emit(subcourse);
 
   this.visibleChange.emit(false);
 }

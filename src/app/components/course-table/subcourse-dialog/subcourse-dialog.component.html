@@ -11,7 +11,6 @@
         Name is required.
       </small>
     </div>
-
     <div class="p-field">
       <label>Start Date</label>
       <input type="date" pInputText formControlName="startDate" />
@@ -23,27 +22,31 @@
     <div class="p-field">
       <label>End Date</label>
       <input type="date" pInputText formControlName="endDate" />
+    
       <small class="p-error" *ngIf="subcourseForm.get('endDate')?.touched && subcourseForm.get('endDate')?.invalid">
         End date is required.
       </small>
-      <small class="p-error"
-      *ngIf="subcourseForm.errors?.['outOfRange'] &&
-             subcourseForm.get('startDate')?.touched &&
-             subcourseForm.get('endDate')?.touched">
- Subcourse must be within course date range.
-</small>
-
-<small class="p-error"
-      *ngIf="subcourseForm.errors?.['overlap'] &&
-             subcourseForm.get('startDate')?.touched &&
-             subcourseForm.get('endDate')?.touched">
- Subcourse dates overlap with another.
-</small>
-
       
+      <small class="p-error"
+             *ngIf="subcourseForm.errors?.['outOfRange'] &&
+                    subcourseForm.get('startDate')?.touched &&
+                    subcourseForm.get('endDate')?.touched">
+        Subcourse must be within course date range.
+      </small>
+    
+      <small class="p-error"
+             *ngIf="subcourseForm.errors?.['overlap'] &&
+                    subcourseForm.get('startDate')?.touched &&
+                    subcourseForm.get('endDate')?.touched">
+        Subcourse dates overlap with another.
+      </small>
+    
+      <small class="p-error" *ngIf="subcourseErrorMessage">
+        {{ subcourseErrorMessage }}
+      </small>
     </div>
-
-   
+    
+    
   </form> <p-footer>
       <button pButton type="submit" label="Save"(click)="save()" [disabled]="subcourseForm.invalid"></button>
       <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="cancel()"></button>
