@@ -3,7 +3,12 @@
     justify-content: flex-end;
     margin: 1rem;
   }
-  /* Add this CSS to your global styles or component styles */
 .p-button-rounded {
   border-radius: 50% !important; 
+}
+.no-subcourses-message {
+  color: #888;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
 }

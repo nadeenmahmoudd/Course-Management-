@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CourseDialogComponent } from "./course-dialog/course-dialog.component";
 import { Subcourse } from '../../models/subcourse';
 import { SubcourseDialogComponent } from "./subcourse-dialog/subcourse-dialog.component";
+import { AccordionModule } from 'primeng/accordion';
 
 
 
@@ -21,7 +22,7 @@ import { SubcourseDialogComponent } from "./subcourse-dialog/subcourse-dialog.co
     ButtonModule,
     DialogModule,
     FormsModule,
-    CourseDialogComponent, SubcourseDialogComponent,],
+    CourseDialogComponent, SubcourseDialogComponent, AccordionModule],
   templateUrl: './course-table.component.html',
   styleUrl: './course-table.component.scss'
 })
@@ -100,7 +101,7 @@ export class CourseTableComponent {
     }
     this.displaySubcourseDialog = false;
   }
-  
+
   deleteCourse(courseId: number) {
     this.courseService.deleteCourse(courseId);
   }
@@ -109,5 +110,19 @@ export class CourseTableComponent {
     this.courseService.deleteSubcourse(courseId, subcourseId);
   }
   
+
+
+
+  expandedRowKeys: any = {};
+
+
+  onRowExpand(event: any) {
+    console.log('Row expanded:', event.data);
+  }
+
+  onRowCollapse(event: any) {
+    console.log('Row collapsed:', event.data);
+  }
+
   
 }

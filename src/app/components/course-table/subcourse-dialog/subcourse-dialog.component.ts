@@ -31,42 +31,44 @@ constructor(private fb: FormBuilder) {}
 ngOnInit() {
   this.initForm();
 }
+private startBeforeEndValidator(control: AbstractControl): ValidationErrors | null {
+  const start = new Date(control.get('startDate')?.value);
+  const end = new Date(control.get('endDate')?.value);
 
+  if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+  return end <= start ? { dateInvalid: true } : null;
+}
+
+
+private noOverlapValidator(control: AbstractControl): ValidationErrors | null {
+  const start = new Date(control.get('startDate')?.value);
+  const end = new Date(control.get('endDate')?.value);
+
+  if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+  for (const sub of this.otherSubcourses) {
+    const s = new Date(sub.startDate);
+    const e = new Date(sub.endDate);
+    if (start <= e && end >= s) {
+      return { overlap: true };
+    }
+  }
+
+  return null;
+}
 initForm() {
   this.subcourseForm = this.fb.group({
     name: ['', Validators.required],
     startDate: ['', Validators.required],
     endDate: ['', Validators.required],
-  }, {   validators: this.validateSubcourseDates.bind(this)
+  }, {
+    validators: Validators.compose([
+      this.startBeforeEndValidator.bind(this),
+      this.withinCourseRangeValidator.bind(this),
+      this.noOverlapValidator.bind(this)
+    ])
   });
-}
-
-
-
-validateSubcourseDates(form: AbstractControl): ValidationErrors | null {
-  const start = new Date(form.get('startDate')?.value);
-  const end = new Date(form.get('endDate')?.value);
-  const courseStart = new Date(this.course?.startDate);
-  const courseEnd = new Date(this.course?.endDate);
-
-  if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) {
-    return null;
-  }
-
-  if (end <= start) return { dateInvalid: true };
-  if (start < courseStart || end > courseEnd) return { outOfRange: true };
-
-  for (const sub of this.otherSubcourses) {
-    if (sub.startDate && sub.endDate) {
-      const s = new Date(sub.startDate);
-      const e = new Date(sub.endDate);
-
-      const isOverlapping = start <= e && end >= s;
-      if (isOverlapping) return { overlap: true };
-    }
-  }
-
-  return null;
 }
 
 
@@ -76,33 +78,21 @@ openSubcourseDialog(course: Course, subcourseToEdit?: Subcourse) {
   if (subcourseToEdit) {
     this.isEdit = true;
     this.subcourseForm.patchValue(subcourseToEdit);
+    this.subcourseForm.updateValueAndValidity();
 
-    // ⬇️ أهم حاجة هنا:
     this.otherSubcourses = course.subcourses.filter(s => s.id !== subcourseToEdit.id);
   } else {
     this.isEdit = false;
     this.subcourseForm.reset();
 
-    // ⬇️ لما تكوني بتضيفي جديد، يبقى كل الـ subcourses هما الـ others
     this.otherSubcourses = [...course.subcourses];
   }
 
   this.visible = true;
-}
-
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes['subcourse'] && this.subcourseForm) {
-  //     if (this.subcourse) {
-  //       this.subcourseForm.patchValue(this.subcourse); 
-  //     } else {
-  //       this.subcourseForm.reset(); 
-  //     }
-  //   }
-  // }
   
+}
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes['course'] || changes['subcourse'] || changes['otherSubcourses']) && this.course) {
+    if (changes['visible'] && this.visible) {
       this.initForm();
   
       if (this.subcourse) {
@@ -111,19 +101,37 @@ openSubcourseDialog(course: Course, subcourseToEdit?: Subcourse) {
     }
   }
   
+save() {
+  this.subcourseForm.markAllAsTouched();
+  this.subcourseForm.updateValueAndValidity();
 
-  save() {
-    if (this.subcourseForm.valid) {
-      const data: Subcourse = {
-        ...this.subcourse,
-        ...this.subcourseForm.value
-      };
-      this.onSave.emit(data);
-      this.visibleChange.emit(false);
-    } else {
-      this.subcourseForm.markAllAsTouched();
-    }
+  if (this.subcourseForm.invalid) {
+    console.warn('Form has errors:', this.subcourseForm.errors);
+    return; 
   }
+
+  const subcourse = this.subcourseForm.value;
+  console.log("Subcourse ", subcourse);
+
+  this.onSave.emit(subcourse); 
+
+  this.visibleChange.emit(false);
+}
+
+
+private withinCourseRangeValidator(group: AbstractControl): ValidationErrors | null {
+  if (!this.course) return null;
+  const start = new Date(group.get('startDate')?.value);
+  const end = new Date(group.get('endDate')?.value);
+  const courseStart = new Date(this.course.startDate);
+  const courseEnd = new Date(this.course.endDate);
+
+  if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+  return (start < courseStart || end > courseEnd)
+    ? { outOfRange: true }
+    : null;
+}
 
   cancel() {
     this.visibleChange.emit(false);

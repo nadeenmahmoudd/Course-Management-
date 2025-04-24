@@ -1,48 +1,63 @@
-<div class="button-container">
+ <div class="button-container">
   <button pButton label="Add Course" icon="pi pi-plus" class="add-course-button" (click)="openAddCourseDialog()"></button>
 </div>
 
-  
-   <p-table [value]="courses" dataKey="id   "
-    >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
-  
-    <ng-template pTemplate="body" let-course>
-      <tr>
-        <td>{{ course.id }}</td>
-        <td>{{ course.name }}</td>
-        <td>{{ course.startDate }}</td>
-        <td>{{ course.endDate }}</td>
-        <td>
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditCourseDialog(course)"></button>
-          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="openAddSubcourseDialog(course)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCourse(course.id)"></button>
+<p-table [value]="courses" dataKey="id" [expandedRowKeys]="expandedRowKeys" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
 
-        </td>
-      </tr>
+  <ng-template pTemplate="body" let-course let-expanded="expanded">
+    <tr>
+      <td>
+        <p-button type="button" pRipple [pRowToggler]="course" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+      </td>
+      <td>{{ course.id }}</td>
+      <td>{{ course.name }}</td>
+      <td>{{ course.startDate }}</td>
+      <td>{{ course.endDate }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditCourseDialog(course)"></button>
+        <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="openAddSubcourseDialog(course)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCourse(course.id)"></button>
+      </td>
+    </tr>
   
-      <tr *ngFor="let sub of course.subcourses" style="background-color: #f9f9f9; margin-left: 10%;">
-        <td></td> 
-        <td colspan="1"><b>Sub:</b> {{ sub.name }}</td>
-        <td>{{ sub.startDate }}</td>
-        <td>{{ sub.endDate }}</td>
-        <td>
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditSubcourseDialog(course, sub)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteSubcourse(course.id, sub.id)"></button>
+    <!-- ExpansionRow for Subcourses -->
+    <tr *ngIf="expandedRowKeys[course.id]">
+      <td colspan="7">
+        <p-table *ngIf="course.subcourses.length > 0" [value]="course.subcourses" [paginator]="false" [rows]="5" [responsive]="true">
+          <ng-template pTemplate="body" let-subcourse>
+            <tr>
+              <td style="font-weight: bold;">Sub-Course info :</td>
+              <td>{{ subcourse.name }}</td>
+              <td>{{ subcourse.startDate }}</td>
+              <td>{{ subcourse.endDate }}</td>
+              <td>
+                <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditSubcourseDialog(course, subcourse)"></button>
+                <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteSubcourse(course.id, subcourse.id)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+  
+        <div *ngIf="course.subcourses.length === 0" class="no-subcourses-message">
+          No subcourses yet.
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  
+</p-table>
 
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  <app-course-dialog
+<app-course-dialog
   [(visible)]="displayDialog"
   [course]="selectedCourse"
   [isEdit]="isEdit"
@@ -58,7 +73,3 @@
   (visibleChange)="displaySubcourseDialog = $event"
   (onSave)="handleSaveSubcourse($event)">
 </app-subcourse-dialog>
-
-
-
-

@@ -1,42 +1,3 @@
-   <!-- <p-dialog header="{{ isEdit ? 'Edit' : 'Add' }} Subcourse"
-          [(visible)]="visible"
-          [modal]="true"
-          [closable]="false"
-          [style]="{width: '400px'}">
-  <form [formGroup]="subcourseForm" (ngSubmit)="save()">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label>Name</label>
-        <input pInputText formControlName="name" />
-      </div>
-      <div class="p-field">
-        <label>Start Date</label>
-        <input type="date" pInputText formControlName="startDate" />
-      </div>
-      <div class="p-field">
-        <label>End Date</label>
-        <input type="date" pInputText formControlName="endDate" />
-        <small class="p-error" *ngIf="subcourseForm.hasError('dateInvalid') && subcourseForm.touched">
-          End date must be after start date.
-        </small>
-        <small class="p-error" *ngIf="subcourseForm.hasError('outOfRange')">
-          Subcourse must be within course date range.
-        </small>
-        <small class="p-error" *ngIf="subcourseForm.hasError('overlap')">
-          Subcourse dates overlap with another.
-        </small>
-      </div>
-    </div>
-
-    <p-footer>
-      <button pButton type="submit" label="Save"></button>
-      <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="cancel()"></button>
-    </p-footer>
-  </form>
-</p-dialog> -->
-
-
-
 <p-dialog header="{{ isEdit ? 'Edit' : 'Add' }} Subcourse"
           [(visible)]="visible"
           [modal]="true"
@@ -65,46 +26,18 @@
       <small class="p-error" *ngIf="subcourseForm.get('endDate')?.touched && subcourseForm.get('endDate')?.invalid">
         End date is required.
       </small>
-      <!-- <small class="p-error" *ngIf="subcourseForm.errors?.dateInvalid && subcourseForm.touched">
-        End date must be after start date.
-      </small>
-      <small class="p-error" *ngIf="subcourseForm.errors?.outOfRange && subcourseForm.touched">
-        Subcourse must be within course date range.
-      </small>
-      <small class="p-error" *ngIf="subcourseForm.errors?.overlap && subcourseForm.touched">
-        Subcourse dates overlap with another.
-      </small> -->
-      <!-- <small class="p-error" *ngIf="subcourseForm.errors?.['dateInvalid'] && subcourseForm.touched">
-        End date must be after start date.
-      </small>
-      <small class="p-error" *ngIf="subcourseForm.errors?.['outOfRange'] && subcourseForm.touched">
-        Subcourse must be within course date range.
-      </small>
-      <small class="p-error" *ngIf="subcourseForm.errors?.['overlap'] && subcourseForm.touched">
-        Subcourse dates overlap with another.
-      </small> -->
-<!-- End date must be after start date -->
-<small class="p-error"
-       *ngIf="subcourseForm.errors?.['dateInvalid'] &&
-              subcourseForm.get('endDate')?.touched &&
-              subcourseForm.get('startDate')?.touched">
-  End date must be after start date.
+      <small class="p-error"
+      *ngIf="subcourseForm.errors?.['outOfRange'] &&
+             subcourseForm.get('startDate')?.touched &&
+             subcourseForm.get('endDate')?.touched">
+ Subcourse must be within course date range.
 </small>
 
-<!-- Out of course range -->
 <small class="p-error"
-       *ngIf="subcourseForm.errors?.['outOfRange'] &&
-              subcourseForm.get('startDate')?.touched &&
-              subcourseForm.get('endDate')?.touched">
-  Subcourse must be within course date range.
-</small>
-
-<!-- Overlapping -->
-<small class="p-error"
-       *ngIf="subcourseForm.errors?.['overlap'] &&
-              subcourseForm.get('startDate')?.touched &&
-              subcourseForm.get('endDate')?.touched">
-  Subcourse dates overlap with another.
+      *ngIf="subcourseForm.errors?.['overlap'] &&
+             subcourseForm.get('startDate')?.touched &&
+             subcourseForm.get('endDate')?.touched">
+ Subcourse dates overlap with another.
 </small>
 
       

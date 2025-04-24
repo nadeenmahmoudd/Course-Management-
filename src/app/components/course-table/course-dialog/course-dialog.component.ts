@@ -53,30 +53,6 @@ export class CourseDialogComponent {
       }
     }
   }
-  
-  // courseForm!: FormGroup;
-
-  // constructor(private fb: FormBuilder) {}
-  
-  // ngOnInit() {
-  //   this.initForm();
-  // }
-  
-  // initForm() {
-  //   this.courseForm = this.fb.group({
-  //     name: [this.course?.name, Validators.required],
-  //     id: [this.course?.id || 0],
-  //     startDate: [this.course?.startDate, Validators.required],
-  //     endDate: [this.course?.endDate, Validators.required],
-  //   }, { validators: this.validateCourseDates });
-  // }
-  
-  // validateCourseDates(form: AbstractControl) {
-  //   const start = new Date(form.get('startDate')?.value);
-  //   const end = new Date(form.get('endDate')?.value);
-  //   return end > start ? null : { dateInvalid: true };
-  // }
-  
   courseForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {}
