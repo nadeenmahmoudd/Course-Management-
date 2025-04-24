@@ -1,0 +1,64 @@
+<div class="button-container">
+  <button pButton label="Add Course" icon="pi pi-plus" class="add-course-button" (click)="openAddCourseDialog()"></button>
+</div>
+
+  
+   <p-table [value]="courses" dataKey="id   "
+    >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+  
+    <ng-template pTemplate="body" let-course>
+      <tr>
+        <td>{{ course.id }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.startDate }}</td>
+        <td>{{ course.endDate }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditCourseDialog(course)"></button>
+          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="openAddSubcourseDialog(course)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCourse(course.id)"></button>
+
+        </td>
+      </tr>
+  
+      <tr *ngFor="let sub of course.subcourses" style="background-color: #f9f9f9; margin-left: 10%;">
+        <td></td> 
+        <td colspan="1"><b>Sub:</b> {{ sub.name }}</td>
+        <td>{{ sub.startDate }}</td>
+        <td>{{ sub.endDate }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="openEditSubcourseDialog(course, sub)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteSubcourse(course.id, sub.id)"></button>
+
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <app-course-dialog
+  [(visible)]="displayDialog"
+  [course]="selectedCourse"
+  [isEdit]="isEdit"
+  (onSave)="handleSaveCourse($event)"
+  (onCancel)="displayDialog = false">
+</app-course-dialog>
+
+<app-subcourse-dialog
+  #subcourseDialog
+  [visible]="displaySubcourseDialog"
+  [subcourse]="selectedSubcourse"
+  [isEdit]="isEditSub"
+  (visibleChange)="displaySubcourseDialog = $event"
+  (onSave)="handleSaveSubcourse($event)">
+</app-subcourse-dialog>
+
+
+
+

@@ -1,0 +1,9 @@
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+  }
+  /* Add this CSS to your global styles or component styles */
+.p-button-rounded {
+  border-radius: 50% !important; 
+}

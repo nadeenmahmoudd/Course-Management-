@@ -1,0 +1,75 @@
+<!-- <p-dialog header="{{ isEdit ? 'Edit Course' : 'Add Course' }}"
+          [(visible)]="visible"
+          [modal]="true"
+          [style]="{width: '400px'}"
+          (onHide)="visibleChange.emit(false)">
+  <form [formGroup]="courseForm" class="p-fluid">
+    <div class="p-field">
+      <label for="name">Course Name</label>
+      <input id="name" type="text" pInputText formControlName="name" />
+      <small class="p-error" *ngIf="courseForm.controls['name'].touched && courseForm.controls['name'].invalid">
+        Course name is required
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="startDate">Start Date</label>
+      <input id="startDate" type="date" pInputText formControlName="startDate" />
+      <small class="p-error" *ngIf="courseForm.hasError('dateInvalid') && courseForm.touched">
+        End date must be after start date.
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="endDate">End Date</label>
+      <input id="endDate" type="date" pInputText formControlName="endDate" />
+
+    </div>
+  </form>
+
+  <p-footer>
+    <button pButton label="Save" (click)="save()" [disabled]="courseForm.invalid"></button>
+    <button pButton label="Cancel" class="p-button-secondary" (click)="cancel()"></button>
+  </p-footer>
+</p-dialog> -->
+
+
+<p-dialog header="{{ isEdit ? 'Edit Course' : 'Add Course' }}"
+          [(visible)]="visible"
+          [modal]="true"
+          [style]="{width: '400px'}"
+          (onHide)="visibleChange.emit(false)">
+  <form [formGroup]="courseForm" class="p-fluid">
+    <div class="p-field">
+      <label for="name">Course Name</label>
+      <input id="name" type="text" pInputText formControlName="name" />
+      <small class="p-error" *ngIf="courseForm.get('name')?.touched && courseForm.get('name')?.invalid">
+        Course name is required
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="startDate">Start Date</label>
+      <input id="startDate" type="date" pInputText formControlName="startDate" />
+      <small class="p-error" *ngIf="courseForm.get('startDate')?.touched && courseForm.get('startDate')?.invalid">
+        Start date is required.
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="endDate">End Date</label>
+      <input id="endDate" type="date" pInputText formControlName="endDate" />
+      <small class="p-error" *ngIf="courseForm.get('endDate')?.touched && courseForm.get('endDate')?.invalid">
+        End date is required.
+      </small>
+      <small class="p-error" *ngIf="courseForm.errors?.['dateInvalid'] && courseForm.touched">
+        End date must be after start date.
+      </small>
+    </div>
+  </form>
+
+  <p-footer>
+    <button pButton label="Save" (click)="save()" [disabled]="courseForm.invalid"></button>
+    <button pButton label="Cancel" class="p-button-secondary" (click)="cancel()"></button>
+  </p-footer>
+</p-dialog>
